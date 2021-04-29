@@ -28,11 +28,20 @@
 #include "../dogm/ultralcd_DOGM.h"
 #include "../mapa_bit/bitmap_kuttercraft.h"
 #include "../../module/settings.h"
+#include "../../module/stepper.h"
+#include "../../module/probe.h"
 #include "../../feature/bedlevel/bedlevel.h"
 #include "../../feature/powerloss.h"
 
 #include "../../module/printcounter.h"
 
+#include "../../feature/bedlevel/ubl/ubl.h"
+
+
+
+////
+
+////
 //constructores de menu
 void crear_marco_superior(PGM_P utf8_str_P, int altura = 0, int largo = 9);
 void menu_main();
@@ -244,7 +253,9 @@ void cambiar_estado_autolevel(){
     (void)settings.load();
 
     if(aux_bool == planner.leveling_active){
-      MarlinUI::goto_screen(error_no_hay_mapa);
+      unified_bed_leveling::z_values[0][0] = 0.025;
+      set_bed_leveling_enabled(true);
+      MarlinUI::goto_screen(menu_ajustes, MarlinUI::endcoder_ulti_aux);
     }else{
       MarlinUI::goto_screen(menu_ajustes, MarlinUI::endcoder_ulti_aux);
     }
